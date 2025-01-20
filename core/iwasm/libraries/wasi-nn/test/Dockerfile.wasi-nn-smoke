@@ -40,9 +40,9 @@ WORKDIR /workspaces/wasi-nn/rust/examples/classification-example/
 RUN cargo build --target=wasm32-wasi
 
 WORKDIR /workspaces/wasi-nn/rust/examples/classification-example/build
-RUN cp ../target/wasm32-wasi/debug/wasi-nn-example.wasm . \
-  && wget -q --no-clobber https://github.com/intel/openvino-rs/raw/main/crates/openvino/tests/fixtures/mobilenet/mobilenet.xml \
-  && wget -q --no-clobber https://github.com/intel/openvino-rs/raw/main/crates/openvino/tests/fixtures/mobilenet/mobilenet.bin
+RUN cp ../target/wasm32-wasi/debug/classification-component-onnx.wasm . \
+  && wget -q --no-clobber https://download.01.org/openvinotoolkit/fixtures/mobilenet/mobilenet.xml \
+  && wget -q --no-clobber https://download.01.org/openvinotoolkit/fixtures/mobilenet/mobilenet.bin
 # There are model files(mobilenet*) and wasm files(wasi-nn-example.wasm) in the directory,
 # /workspaces/wasi-nn/rust/examples/classification-example/build
 
@@ -61,8 +61,8 @@ ENV PATH=/opt/wasmedge/bin:${PATH}
 # wasmedge-wasinn-examples
 WORKDIR /workspaces/wasmedge-wasinn-examples
 RUN git clone --depth 1 https://github.com/second-state/WasmEdge-WASINN-examples.git .
-COPY core/iwasm/libraries/wasi-nn/test/bump_wasi_nn_to_0_6_0.patch .
-RUN git apply ./bump_wasi_nn_to_0_6_0.patch
+# COPY core/iwasm/libraries/wasi-nn/test/bump_wasi_nn_to_0_6_0.patch .
+# RUN git apply ./bump_wasi_nn_to_0_6_0.patch
 
 # recompile with wasi-nn 0.6.0
 WORKDIR /workspaces/wasmedge-wasinn-examples/openvino-mobilenet-image/

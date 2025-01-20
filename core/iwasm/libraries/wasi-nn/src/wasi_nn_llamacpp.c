@@ -4,6 +4,8 @@
  */
 #include "wasi_nn_types.h"
 #include "utils/logger.h"
+#include "stdlib.h"
+#include "platform_api_vmcore.h"
 #include "llama.h"
 #include "ggml.h"
 #include "cJSON.h"

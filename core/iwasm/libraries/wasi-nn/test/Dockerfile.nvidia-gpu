@@ -37,7 +37,7 @@ RUN rm -rf build \
        -DWAMR_BUILD_WASI_NN_ENABLE_GPU=1 \
   && cmake --build build -j "$(grep -c ^processor /proc/cpuinfo)"
 
-FROM nvidia/cuda:11.3.0-runtime-ubuntu20.04
+FROM nvidia/cuda:11.3.1-runtime-ubuntu20.04
 
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \

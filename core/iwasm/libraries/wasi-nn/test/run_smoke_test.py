@@ -326,18 +326,18 @@ def execute_wasmedge_wasinn_examples(iwasm_bin: str, wasmedge_bin: str):
     # tflite_birds_v1_image_dir = Path.cwd().joinpath("./tflite-birds_v1-image")
     # execute_tflite_birds_v1_image(iwasm_bin, wasmedge_bin, tflite_birds_v1_image_dir)
 
-    openvino_mobile_image_dir = Path.cwd().joinpath("./openvino-mobilenet-image")
-    execute_openvino_mobilenet_image(iwasm_bin, wasmedge_bin, openvino_mobile_image_dir)
+    # openvino_mobile_image_dir = Path.cwd().joinpath("./openvino-mobilenet-image")
+    # execute_openvino_mobilenet_image(iwasm_bin, wasmedge_bin, openvino_mobile_image_dir)
 
-    openvino_mobile_raw_dir = Path.cwd().joinpath("./openvino-mobilenet-raw")
-    execute_openvino_mobilenet_raw(iwasm_bin, wasmedge_bin, openvino_mobile_raw_dir)
+    # openvino_mobile_raw_dir = Path.cwd().joinpath("./openvino-mobilenet-raw")
+    # execute_openvino_mobilenet_raw(iwasm_bin, wasmedge_bin, openvino_mobile_raw_dir)
 
-    openvino_road_segmentation_adas_dir = Path.cwd().joinpath(
-        "./openvino-road-segmentation-adas"
-    )
-    execute_openvino_road_segmentation_adas(
-        iwasm_bin, wasmedge_bin, openvino_road_segmentation_adas_dir
-    )
+    # openvino_road_segmentation_adas_dir = Path.cwd().joinpath(
+    #     "./openvino-road-segmentation-adas"
+    # )
+    # execute_openvino_road_segmentation_adas(
+    #     iwasm_bin, wasmedge_bin, openvino_road_segmentation_adas_dir
+    # )
 
     wasmedge_ggml_qwem_dir = Path.cwd().joinpath("./wasmedge-ggml/qwen")
     execute_wasmedge_ggml_qwen(iwasm_bin, wasmedge_bin, wasmedge_ggml_qwem_dir)
