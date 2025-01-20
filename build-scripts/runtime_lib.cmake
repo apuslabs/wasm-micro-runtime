@@ -210,3 +210,5 @@ set (source_all
 )
 
 set (WAMR_RUNTIME_LIB_SOURCE ${source_all})
+
+add_library (libiwasm SHARED ${WAMR_RUNTIME_LIB_SOURCE})
