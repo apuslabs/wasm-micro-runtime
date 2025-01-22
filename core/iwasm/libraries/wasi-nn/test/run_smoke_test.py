@@ -260,7 +260,7 @@ def execute_openvino_road_segmentation_adas(
     print("------------------------------------------------------------")
 
 
-def execute_wasmedge_ggml_qwen(iwasm_bin: str, wasmedge_bin: str, cwd: Path):
+def execute_wasmedge_ggml_qwen(iwasm_bin: str, cwd: Path):
     iwasm_args = ["--dir=."]
     wasm_file = ["./target/wasm32-wasi/debug/wasmedge-ggml-qwen.wasm"]
     wasm_args = ["./qwen1_5-0_5b-chat-q2_k.gguf"]
@@ -317,31 +317,54 @@ def execute_wasmedge_ggml_qwen(iwasm_bin: str, wasmedge_bin: str, cwd: Path):
     print("------------------------------------------------------------")
 
 
-def execute_wasmedge_wasinn_examples(iwasm_bin: str, wasmedge_bin: str):
+def execute_wasmedge_ggml_embedding(iwasm_bin: str, cwd: Path):
+    iwasm_args = ["--dir=."]
+    wasm_file = ["./target/wasm32-wasi/debug/wasmedge-ggml-llama-embedding.wasm"]
+    wasm_args = ["./all-MiniLM-L6-v2-ggml-model-f16.gguf"]
+
+    cmd = [iwasm_bin]
+    cmd.extend(iwasm_args)
+    cmd.extend(wasm_file)
+    cmd.extend(wasm_args)
+
+    # print(f'Execute: {" ".join(cmd)}')
+
+    prompt = "what is the capital of Pakistan"
+
+    with subprocess.Popen(
+        cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        cwd=cwd,
+    ) as p:
+        p.stdin.write(prompt.encode())
+        p.stdin.write(b"\n")
+        p.stdin.flush()
+        # ASSITANT
+        p.stdout.readline()
+        # xxx
+        answer = p.stdout.readline().hex()
+        # USER
+        p.stdout.readline()
+
+        p.terminate()
+
+    print("------------------------------------------------------------")
+    pprint(answer)
+    print("------------------------------------------------------------")
+
+
+def execute_wasmedge_wasinn_examples(iwasm_bin: str):
     assert Path.cwd().name == "wasmedge-wasinn-examples"
     assert shutil.which(iwasm_bin)
-    assert shutil.which(wasmedge_bin)
-
-    # TODO: keep commenting until https://github.com/bytecodealliance/wasm-micro-runtime/pull/3597 is merged
-    # tflite_birds_v1_image_dir = Path.cwd().joinpath("./tflite-birds_v1-image")
-    # execute_tflite_birds_v1_image(iwasm_bin, wasmedge_bin, tflite_birds_v1_image_dir)
-
-    # openvino_mobile_image_dir = Path.cwd().joinpath("./openvino-mobilenet-image")
-    # execute_openvino_mobilenet_image(iwasm_bin, wasmedge_bin, openvino_mobile_image_dir)
-
-    # openvino_mobile_raw_dir = Path.cwd().joinpath("./openvino-mobilenet-raw")
-    # execute_openvino_mobilenet_raw(iwasm_bin, wasmedge_bin, openvino_mobile_raw_dir)
-
-    # openvino_road_segmentation_adas_dir = Path.cwd().joinpath(
-    #     "./openvino-road-segmentation-adas"
-    # )
-    # execute_openvino_road_segmentation_adas(
-    #     iwasm_bin, wasmedge_bin, openvino_road_segmentation_adas_dir
-    # )
 
     wasmedge_ggml_qwem_dir = Path.cwd().joinpath("./wasmedge-ggml/qwen")
-    execute_wasmedge_ggml_qwen(iwasm_bin, wasmedge_bin, wasmedge_ggml_qwem_dir)
+    execute_wasmedge_ggml_qwen(iwasm_bin, wasmedge_ggml_qwem_dir)
+
+    wasmedge_ggml_embedding_dir = Path.cwd().joinpath("./wasmedge-ggml/embedding")
+    execute_wasmedge_ggml_embedding(iwasm_bin, wasmedge_ggml_embedding_dir)
 
 
 if __name__ == "__main__":
-    execute_wasmedge_wasinn_examples("iwasm", "wasmedge")
+    execute_wasmedge_wasinn_examples("iwasm")
