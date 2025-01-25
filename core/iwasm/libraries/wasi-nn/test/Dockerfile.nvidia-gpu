@@ -1,6 +1,5 @@
 # Copyright (C) 2019 Intel Corporation.  All rights reserved.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-
 FROM ubuntu:20.04 AS base
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -33,9 +32,10 @@ RUN git config --global http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
 WORKDIR /home/wamr/product-mini/platforms/linux
 RUN rm -rf build \
   && cmake -S . -B build \
-       -DWAMR_BUILD_WASI_NN=1 -DWAMR_BUILD_WASI_NN_TFLITE=1\
+       -DWAMR_BUILD_WASI_NN=1 -DWAMR_BUILD_WASI_EPHEMERAL_NN=1 -DWAMR_BUILD_WASI_NN_LLAMACPP=1\
        -DWAMR_BUILD_WASI_NN_ENABLE_GPU=1 \
-  && cmake --build build -j "$(grep -c ^processor /proc/cpuinfo)"
+  && cmake --build build -j "$(grep -c ^processor /proc/cpuinfo)" \
+  && cmake --install build
 
 FROM nvidia/cuda:11.3.1-runtime-ubuntu20.04
 
@@ -53,7 +53,8 @@ ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 
 COPY --from=base /home/wamr/product-mini/platforms/linux/build/iwasm /usr/bin
-COPY --from=base /home/wamr/product-mini/platforms/linux/build/lib*.so /usr/lib
+COPY --from=base /home/wamr/product-mini/platforms/linux/build/lib* /usr/lib
+COPY --from=base /home/wamr/product-mini/platforms/linux/build/_deps /usr/lib/_deps
 ENV LD_LIBRARY_PATH=/usr/lib
 
 ENTRYPOINT [ "iwasm" ]
