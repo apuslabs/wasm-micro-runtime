@@ -33,7 +33,7 @@ RUN git config --global http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
 WORKDIR /home/wamr/product-mini/platforms/linux
 RUN rm -rf build \
   && cmake -S . -B build\
-       -DWAMR_BUILD_WASI_NN=1 -DWAMR_BUILD_WASI_NN_TFLITE=1\
+       -DWAMR_BUILD_WASI_NN=1 -DWAMR_BUILD_WASI_EPHEMERAL_NN=1 -DWAMR_BUILD_WASI_NN_LLAMACPP=1\
   && cmake --build build -j "$(grep -c ^processor /proc/cpuinfo)"
 
 FROM ubuntu:22.04

@@ -195,7 +195,9 @@ choose_a_backend()
     void *handle;
 
     handle = dlopen(LLAMACPP_BACKEND_LIB, RTLD_LAZY);
-    if (handle) {
+    if (!handle) {
+        printf("dlopen error: %s\n", dlerror());
+    } else if (handle) {
         NN_INFO_PRINTF("Using llama.cpp backend");
         dlclose(handle);
         return ggml;
@@ -525,9 +527,11 @@ wasi_nn_load_by_name_with_config(wasm_exec_env_t exec_env, char *name,
     }
 
     NN_DBG_PRINTF("[WASI NN] LOAD_BY_NAME_WITH_CONFIG %s %s...", name, config);
+    printf("[WASI NN] LOAD_BY_NAME_WITH_CONFIG %s %s...\n", name, config);
 
     graph_encoding loaded_backend = autodetect;
     if (!detect_and_load_backend(autodetect, lookup, &loaded_backend)) {
+        fflush(stdout);
         NN_ERR_PRINTF("load backend failed");
         return invalid_encoding;
     }
