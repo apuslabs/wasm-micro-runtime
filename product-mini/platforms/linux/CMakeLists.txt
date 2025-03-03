@@ -109,7 +109,7 @@ endif ()
 
 if (NOT DEFINED WAMR_BUILD_REF_TYPES)
   # Disable reference types by default
-  set (WAMR_BUILD_REF_TYPES 0)
+  set (WAMR_BUILD_REF_TYPES 1)
 endif ()
 
 if (NOT DEFINED WAMR_BUILD_DEBUG_INTERP)
